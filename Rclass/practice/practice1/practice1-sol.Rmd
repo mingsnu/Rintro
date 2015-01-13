@@ -1,0 +1,14 @@
+```{r setup, include=FALSE}
+# set global chunk options
+opts_chunk$set(fig.path = 'figure/slides-', cache.path = 'cache/slides-', cache = TRUE)
+# upload images automatically
+# opts_knit$set(upload.fun = imgur_upload)
+```
+
+```{r code-ext, include = FALSE, cache = FALSE}
+read_chunk('practice1-sol.R')
+```
+
+```{r  Practice1}
+
+```

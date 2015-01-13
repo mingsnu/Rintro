@@ -1,0 +1,22 @@
+由于表格问题，在运行knit得到md文件后，用pandoc -s -S Rclass4.md -o Rclass4-pandoc.html命令得到html文件，再将如下内容复制到Rclass4-pandoc.html里。
+
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+tt, code, pre {
+   font-family: Consolas, 'Lucida Console', 'DejaVu Sans Mono', 'Droid Sans Mono', Monaco, monospace;
+}
+.r {
+   background-color: #F8F8F8;
+}
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+}
+pre code {
+  display: block; padding: 0.5em;
+}

@@ -1,0 +1,34 @@
+\documentclass[a4paper,25pt]{article}
+\usepackage{amsmath}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\title{Practice2}
+\author{}
+\begin{document}
+% generates the title
+\maketitle
+\begin{Large}
+\noindent1. Define a function called \texttt{gData} with arguments \texttt{n},  \texttt{beta0}, \texttt{beta1}, \texttt{xFUN}, \texttt{seed} to generate simulation data set, where
+\begin{itemize}
+	\item \texttt{n}: Number of observations, default is 10
+	\item \texttt{beta0}: A given constant, default is 1
+	\item \texttt{beta1}: A given constant, default is 2
+	\item \texttt{xFUN}: Use which distribution to generate x, default use \texttt{runif}
+	\item \texttt{seed}: Seed number, default is \texttt{as.numeric(Sys.time())}
+\end{itemize}
+The returned value of the function is a {\em list}, with the first element a data frame, the second element the seed number. 
+The data frame contains two columns with column names \texttt{x} and \texttt{y} which indicates the independent variable and dependent variable respectively.
+$x$ and $y$ have the following relationship:
+$$y = \beta_0 + \beta_1*x + \epsilon,\hspace{0.5cm} \epsilon \sim N(0, 1)$$
+
+\noindent2. Define a function called \texttt{mylm} with only one argument \texttt{x}, where \texttt{x}is a data frame with the same structure as that returned from \texttt{gData} function defined in 1. The returned value of the function is a {\em list}, whose elements are listed as follows
+\begin{itemize}
+	\item \texttt{beta0hat}: Estimated value of \texttt{beta0}
+	\item \texttt{beta1hat}: Estimated value of \texttt{beta1}
+	\item \texttt{beta0hat.var}: Estimated variance of \texttt{beta0}
+	\item \texttt{beta1hat.var}: Estimated variance of \texttt{beta1}
+	\item \texttt{n}: Number of observations
+\end{itemize}
+
+\noindent3. Using the defined functions in 1 and 2, do \textbf{Practice1} again. 
+\end{Large}
+\end{document}

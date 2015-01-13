@@ -1,0 +1,76 @@
+% Objects Attributes
+% Weicheng Zhu
+% 2012/05/28
+
+  <font size = 3 color = "blue">Highly recommend you to use Chrome to read this tutorial! <br /> This tutorial is mainly for Windows users.</font>
+-----------------------------------------------------------------------
+```{r setup, include=FALSE}
+# set global chunk options
+opts_chunk$set(fig.path = 'figure/slides-', cache.path = 'cache/slides-', cache = TRUE)
+#options(width = 55)
+#options(keep.comment = FALSE) 
+#upload images automatically
+opts_knit$set(upload.fun = imgur_upload)
+```
+
+```{r code-ext, include = FALSE, cache = FALSE}
+read_chunk('attributes.R')
+```
+
+# Attributes
+
+Again, we use this example to start our topic
+
+```{r startwith, eval=FALSE}
+
+```
+**Have you ever been curious about what `- attr(*, "foo")` is?**
+**They are the attributes of the objects.**
+
+
+Attributes are some properties associated with objects in R. Making this concept clear will help you to understand in depth what an R object is.
+
+Some important attributes are listed as follows:
+
+- **class** The class of the object.
+- **comment** A comment on the object; often a description of what the object means.
+- **dim** Dimensions of the object.
+- **dimnames** Names associated with each dimension of the object.
+- **names** Returns the names attribute of an object. Results depend on object type; for example, returns the name of each data column in a data frame or each named object in an array.
+- **row.names** The name of each row in an object (related to dimnames).
+- **tsp** Start time for an object. Useful for time series data.
+- **levels** Levels of a factor.
+
+These attributes are treated specially and have restrictions on the values which can be set.
+
+Besides, you can also define other attributes you like, most of the time they are used to store some necessary information about the object.
+
+## Examples about attributes
+
+Let's study attributes through some examples:
+
+```{r attr-example}
+
+```
+
+## Class
+`Class` is one of the objects `attributes`. For simple objects, the class and
+type are often closely related. For compound objects, however, the two can be
+different.
+Sometimes, the `class` of an object is listed with `attributes`. However, for certain
+classes (such as `matrices` and `arrays`), the `class` is implicit. To determine the `class` of
+an object, you can use the `class` function. 
+
+```{r attr-class}
+
+```
+
+
+
+
+
+
+
+
+
+

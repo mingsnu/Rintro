@@ -1,0 +1,111 @@
+% R Graphics
+% Weicheng Zhu
+% 2012/06/06
+
+  <font size = 3 color = "blue">Highly recommend you to use Chrome to read this tutorial! <br /> This tutorial is mainly for Windows users.</font>
+-----------------------------------------------------------------------
+```{r setup, include=FALSE}
+# set global chunk options
+opts_chunk$set(fig.path = 'figure/slides-', cache.path = 'cache/slides-', cache = TRUE)
+#options(width = 55)
+#options(keep.comment = FALSE) 
+#upload images automatically
+#opts_knit$set(upload.fun = imgur_upload)
+```
+
+```{r code-ext, include = FALSE, cache = FALSE}
+read_chunk('Rclass5.R')
+```
+
+# Outline
+
+## Examples
+
+Now we are going to one of the most attractive part of R language: **Graphics**.
+First, before we actually go into it, let's enjoy the view of R graphics together :)
+The purpose here is just to make you have an overall impression of the range of graphical images that can produced by R :)
+
+```{r review, eval = FALSE}
+
+```
+
+To see more at the [R Graph Gallery][gallery]
+
+## Organization
+
+- Graphics Systems
+  There are two big graphics systems in R, `traditional graphics` and `grid`.
+
+- Graphics Devices (package)
+  Default (`grDevices`),  Cairo/GTK (`cairoDevice`), SVG (`RSvgDevice`), Java (`JavaGD`), OpenGL (`rgl`), Gtk (`RGtk2`)
+
+- Graphics Packages
+    - `graphics` (traditional graphics system)
+    - `lattice`, `ggplot2` (grid system)
+    - ...
+
+- I'll omit all details here, and turn back if necessary later. For more information, see [http://cran.r-project.org/web/views/Graphics.html](http://cran.r-project.org/web/views/Graphics.html)
+
+# Traditional Graphics
+
+We'll cover most of the functions in `graphics` package in this section.
+
+To begin with, let's have a look at the most usually used function `plot()`.
+
+## `plot()` function
+
+Recall that `plot()` is a [generic function][generic-function], so it can accept objects from a variety of [classes][attribute]. But many methods will accept the following arguments:
+- `x`: coordinates OR function OR R object with a plot method can be provided.
+- `y`: y coordinates OR optional if x is an appropriate structure.
+- `type`: what type of plot should be drawn. Possible types are `"p", "l", "b", "c", "o", "h", "s", "S", "n"`
+- main: an overall title for the plot
+- sub: a sub title for the plot
+- xlab: a title for the x axis
+- ylab: YOU KNOW
+- asp: the y/x aspect ratio
+
+Also we can check the arguments of the `plot.default()` function, we can note it has more arguments, I won't explain more arguments here, but notice the defination of `x` and `y` here, they are different from the `plot()` function's. I hope you can understand the underlying mechanism, if not please read [S3 methods][generic-function] carefully.
+Let's study these arguments through some examples.
+
+```{r  plot-function, eval = FALSE}
+
+```
+
+
+### `type`
+
+```{r plot-type, eval = FALSE}
+
+```
+
+## *High-level* Functions
+Generally speaking, a *High-level* plotting function is a function that can be used to produce a complete plot by itself. Let's have a look at some of the most usually used high-level functions through the following examples:
+
+```{r high-level, eval = FALSE}
+
+```
+
+## *Low-level* Functions
+It is very often the case that a high-level plotting function does not produce exactly the final result that is desired. In this case, we should use low-level functions to control the fine details of a plot. Also let's have a look at some of the low-level functions through examples:
+
+```{r low-level, eval = FALSE}
+
+```
+
+
+
+
+[gallery]: http://addictedtor.free.fr/graphiques
+[generic-function]: http://dreamhunter.me/bbpress/Rstudy/Rclass3.html
+[attribute]: http://dreamhunter.me/bbpress/Rstudy/attributes.html
+
+
+
+
+
+
+
+
+
+
+

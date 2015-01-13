@@ -1,0 +1,284 @@
+Basic R: Introduction and basic functions
+=========================================
+
+[Weicheng Zhu](http://dreamhunter.me)
+
+2013/04/30
+
+```{r, setup-options ,cache=FALSE, echo=FALSE}
+read_chunk('./Rcode/part01_practice.R')
+opts_chunk$set(cache=FALSE, eval=FALSE)
+```
+
+## Why R
+- Free!
+- Open Source!
+- Command line: flexible
+- Advanced (newest) statistical routines (4391 packages available now)
+- Runs on a wide variety of platforms: Windos, UNIX,  MacOS...
+- Access to database: Oracle, DB2, MySQL...
+- Foreign language interfaces: C, C++, Fortran, Python, Java...
+- Other statistical software can invoke R codes
+- Dynamic report generation: R + LaTeX (`knitr`, `Sweave`)
+- ...
+
+## Downloading and Installing R
+- Download it from [CRAN][cran]
+	- CRAN?
+	- mirrors?
+- Install: (In Windows) click, click, click...
+- Other popular GUIs: Rstudio, Tinn-R, RKward, Notepad++, Emacs, Vim, ...
+
+# Working with R
+
+- Prompts: 
+	- `>`, `+`: change it via `options(prompt = "", continue = "")`
+- Comments
+  - `#`
+- Basic Operation
+	- Math operator: `+`, `-`, `*`, `/`, `^`, `%%`, `%/%`
+	- logical operator: `&`, `&&`, `|`, `||`, `!`, `>`, `<`, `>=`, `<=`, `==` <font color = "red">(difference between `&` and `&&`?)</font>
+- Basic math functions
+	- `sqrt()`, `sin()`, `cos()`, `tan()`, `abs()`, `log()`, `exp()`, `factorial()`, `choose()`
+
+
+## Variables
+
+- Assignment operator: `<-`,`=`, `assign`
+
+```{r}
+x <- 1; y = FALSE; assign("z", pi)
+k <- x + y + z > 0
+```
+
+- Case sensitive
+
+- Reserved words
+
+```{r,tidy=FALSE}
+?Reserved
+```
+
+## Data types
+- `numeric(real, integer, double)`, `complex`, `logical`, `character`, `function`, `expression`, ...
+`?mode`
+
+- `NULL` (no value), `NA` (Not Available), `NaN` (Not a Number), `Inf` (Infinity) 
+
+- Judge Data types (add `is.` prefix to the data types)
+
+```{r}
+is.numeric(); is.logical(); is.character(); is.na(); is.nan(); is.null(); ...
+```
+
+- Transfer Data types (add `as.` prefix to the data types)
+
+```{r}
+as.numeric(); as.logical(); as.character(); ...
+```
+
+## Data structures
+
+- vector: We can TREAT IT AS a column vector with numeric, character or logical type elements. 
+- matrix: Two dimensions, all elements should have the same data type.
+- array: Multi dimensions, all elements should have the same data type.
+- data frame: Similar with matrix, but every column can have different data types.
+- list: Like an expanded vector, whose elements can be any type, even list itself.
+- factor: A categorical vector.
+- ts: Time series data.
+
+### vector
+
+```{r, vector}
+```
+
+### factor
+
+```{r, factor}
+```
+
+### matrix
+
+```{r, matrix}
+```
+
+### array
+
+```{r, array}
+```
+
+### dataframe
+
+```{r, dataframe}
+```
+
+### list
+
+```{r, list}
+```
+
+
+### Data structure judgement
+
+```{r}
+is.vector()
+is.data.frame()
+is.matrix()
+is.list()
+is.factor()
+is.ts()
+```
+
+### Data structure transformation
+
+```{r}
+as.data.frame()
+as.matrix()
+as.list()
+as.factor()
+as.ts()
+unlist() # transform list to vector
+```
+
+## Basic calculation
+
+- vector + constant
+
+```{r}
+vec1 + 1
+```
+
+- vector + vector
+
+```{r}
+vec1 + vec2
+```
+
+- vector * constant
+
+```{r}
+2 * vec1
+```
+
+- vector / constant
+
+```{r}
+vec1 / 2
+5 / vec1
+```
+
+- vector * vector
+
+```{r}
+vec1 * vec1
+```
+
+- vector * matrix
+
+```{r}
+mat4 * vec1 # equivalent to vec1 * mat4
+```
+
+- *vector %\*% matrix*
+
+```{r}
+t(vec1) %*% mat4
+vec1 %*% mat4
+vec1 %*% vec1
+t(vec1) %*% vec1
+vec1 %*% t(vec1)
+```
+
+- matrix * matrix
+
+```{r}
+mat4 * mat4
+mat4^2
+```
+
+- matrix %*% matrix
+
+```{r}
+mat4 %*% t(mat4)
+```
+
+## Functions
+
+- `f(argument1, argument2, ...)`
+- Basic statistical functions
+
+```{r}
+sum(); mean(); max(); min(); range(); var();
+sd(); median(); quantile();	cor(); length();
+round(); floor(); ceiling(); summary()
+```
+
+```{r}
+sort(); order(); rank(); rev(); cusum(); 
+t(); solve(); eigen()
+```
+
+```{r}
+pnorm(); dnorm(); qnorm(); rnorm()
+```
+
+p: probability; d: density;
+q: quantile; r: random\
+For more, see: `?Distributions`
+
+```{r}
+lm(); t.test(); aov()
+```
+
+## <font color = "red">HELP!!</font>
+
+### The structure of the help documents
+- `?foo` OR `help(foo)`
+- function name {package	}
+- Title
+- Description: what can the function do?
+- Usage: the format of the function
+- Arguments: details about the arguments
+- Details: details about the function
+- Value: what value does the function return?
+- References
+- See Also: related functions
+- Examples: examples about this function
+
+### How to read help?
+- First, read the *Description* carefully
+- If you are in a hurry, go to the *Examples* directly
+- Usually, after running the *Examples* you may have known the usage of the function in general
+- If not, read the arguments carefully
+- If you still can't understand the function (or the arguments) well, read the *Details* part
+- If after reading all of this above, you still can't solve your problem, you may get the wrong function, try others.
+
+### If you don't know which function to use
+- The best way is to GOOGLE! You should use the keywords: R + what you want to search.
+- `?help.search()`
+- `help.start()`
+- `RSiteSearch()`
+- `apropos()`
+
+
+# Appendix
+
+## Usefull keybindings
+- In R console
+	- `Ctrl + a`
+	- `Ctrl + e`
+	- `Ctrl + f`
+	- `Ctrl + b`
+	- `Ctrl + p`
+	- `Ctrl + n`
+	- `Ctrl + d`
+	- `Ctrl + k`
+	- `Ctrl + l`
+- In R editor
+	- `Ctrl + r`
+
+
+[habit]:http://google-styleguide.googlecode.com/svn/trunk/google-r-style.html
+[book4R]:http://www.r-project.org/doc/bib/R-publications.html
+[UseR]:http://www.springer.com/series/6991?detailsPage=titles
+[cran]:http://cran.r-project.org/mirrors.html

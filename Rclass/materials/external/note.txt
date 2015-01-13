@@ -1,0 +1,5 @@
+http://www.stats.uwo.ca/faculty/murdoch/software/compilingDLLs/
+
+Writing R Extensions #5.9 Handling R objects in C
+
+http://users.stat.umn.edu/~geyer/rc/

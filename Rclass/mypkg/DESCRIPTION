@@ -1,0 +1,9 @@
+Package: mypkg
+Version: 0.1-0
+Date: 2012-07-21
+Title: The simplest package
+Description: Study how to make the simplest package.
+Author: My Name <myemail@a.b>, My partener <hisemail@d.e>
+Maintainer: My Name <myemail@a.b>
+License: GPL (>=2)
+URL: www.xxx.xxx

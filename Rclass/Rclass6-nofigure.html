@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Weicheng Zhu" />
+  <title>Customizing Trditional Graphics</title>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+tt, code, pre {
+   font-family: Consolas, 'Lucida Console', 'DejaVu Sans Mono', 'Droid Sans Mono', Monaco, monospace;
+}
+.r {
+   background-color: #F8F8F8;
+}
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+}
+pre code {
+  display: block; padding: 0.5em;
+}
+  </style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Customizing Trditional Graphics</h1>
+<h2 class="author">Weicheng Zhu</h2>
+<h3 class="date">2012/06/10</h3>
+</div>
+<h2 id="highly-recommend-you-to-use-chrome-to-read-this-tutorial-this-tutorial-is-mainly-for-windows-users."><font size = 3 color = "blue">Highly recommend you to use Chrome to read this tutorial! <br /> This tutorial is mainly for Windows users.</font></h2>
+<h1 id="plotting-regions">Plotting regions</h1>
+<p>Understanding the concept of plotting regions well will be very helpful when dealing with graphics in more detail. I’d like to use the examples from the book <em><a href="http://www.stat.auckland.ac.nz/~paul/RGraphics/chapter3.html">R Graphics</a></em>(Paul Murrell) to explain some of the concepts:</p>
+<ul>
+<li>outer margins</li>
+<li>figure region</li>
+<li>plot region</li>
+<li>figure margins</li>
+<li>inner region</li>
+</ul>
+<img src="http://www.stat.auckland.ac.nz/~paul/RGraphics/custombase-baseregions1fig.png" alt="regions1" width="400"  /> <img src="http://www.stat.auckland.ac.nz/~paul/RGraphics/custombase-baseregionsnfig.png" alt="regions1" width="400" />
+<h1 id="set-or-query-graphical-parameters">Set or Query Graphical Parameters</h1>
+<p>Maybe you have encountered problems such as “big plot margin”, “plot layout” and so on. In order to solve these problems we need to learn <em>par()</em> function.</p>
+<ul>
+<li>Description: <em>par</em> can be used to set or query graphical parameters. Parameters can be set by specifying them as arguments to par in tag = value form, or by passing them as a list of tagged values.</li>
+<li>Usage: <code>par(..., no.readonly = FALSE)</code></li>
+</ul>
+<p>Can you count how many arguments are available?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(<span class="kw">par</span>()) + <span class="dv">1</span></code></pre>
+<pre><code>## [1] 72</code></pre>
+<p>Let’s read through it!</p>
+<ul>
+<li><code>adj</code>, <code>srt</code> and <code>text()</code> function</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">6</span>, <span class="dv">1</span>:<span class="dv">6</span>, <span class="dt">col =</span> <span class="dv">2</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">7</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">7</span>))
+<span class="kw">text</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="st">&quot;adj = 0&quot;</span>, <span class="dt">adj =</span> <span class="dv">0</span>, <span class="dt">cex =</span> <span class="fl">0.8</span>, <span class="dt">srt =</span> <span class="dv">30</span>)
+<span class="kw">text</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="st">&quot;adj = 0.5&quot;</span>, <span class="dt">adj =</span> <span class="fl">0.5</span>, <span class="dt">cex =</span> <span class="fl">0.8</span>, <span class="dt">srt =</span> <span class="dv">60</span>)
+<span class="kw">text</span>(<span class="dv">3</span>, <span class="dv">3</span>, <span class="st">&quot;adj = 1&quot;</span>, <span class="dt">adj =</span> <span class="dv">1</span>, <span class="dt">cex =</span> <span class="fl">0.8</span>, <span class="dt">srt =</span> <span class="dv">90</span>)
+<span class="kw">text</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="st">&quot;adj = c(0, 0)&quot;</span>, <span class="dt">adj =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">cex =</span> <span class="fl">0.8</span>, <span class="dt">srt =</span> <span class="dv">120</span>)
+<span class="kw">text</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="st">&quot;adj = c(0, 1)&quot;</span>, <span class="dt">adj =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">cex =</span> <span class="fl">0.8</span>, <span class="dt">srt =</span> <span class="dv">150</span>)
+<span class="kw">text</span>(<span class="dv">6</span>, <span class="dv">6</span>, <span class="st">&quot;adj = c(1, 1)&quot;</span>, <span class="dt">adj =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">cex =</span> <span class="fl">0.8</span>, <span class="dt">srt =</span> <span class="dv">180</span>)</code></pre>
+<ul>
+<li><code>ann</code></li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">ann =</span> <span class="ot">FALSE</span>)
+<span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">10</span>)</code></pre>
+<ul>
+<li><code>ask</code></li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">ask =</span> <span class="ot">TRUE</span>)
+for (i in <span class="dv">1</span>:<span class="dv">3</span>) <span class="kw">plot</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>))</code></pre>
+<ul>
+<li><code>bg</code></li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">bg =</span> <span class="st">&quot;skyblue1&quot;</span>)
+<span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">10</span>)
+<span class="co"># Note it is different from `bg` argument of `plot.default`</span>
+<span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">8</span>, <span class="dt">pch =</span> <span class="dv">24</span>, <span class="dt">bg =</span> <span class="dv">1</span>:<span class="dv">8</span>)</code></pre>
+<ul>
+<li><code>pch</code></li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">ipch &lt;- <span class="dv">0</span>:<span class="dv">25</span>
+k &lt;- <span class="dv">5</span>
+dd &lt;- <span class="kw">c</span>(-<span class="dv">1</span>, <span class="dv">1</span>)/<span class="dv">2</span>
+rx &lt;- dd + <span class="kw">range</span>(ix &lt;- ipch%/%k)
+ry &lt;- dd + <span class="kw">range</span>(iy &lt;- k - ipch%%k)
+<span class="kw">plot</span>(rx, ry, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">axes =</span> <span class="ot">FALSE</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;pch&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> ix, <span class="dt">h =</span> iy, <span class="dt">col =</span> <span class="st">&quot;lightgray&quot;</span>, <span class="dt">lty =</span> <span class="st">&quot;dotted&quot;</span>)
+for (i in <span class="dv">1</span>:<span class="dv">26</span>) {
+    pc &lt;- ipch[i]
+    ## &#39;col&#39; symbols with a &#39;bg&#39;-colored interior (where available) :
+    <span class="kw">points</span>(ix[i], iy[i], <span class="dt">pch =</span> pc, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">bg =</span> <span class="st">&quot;green&quot;</span>, <span class="dt">cex =</span> <span class="dv">3</span>)
+    <span class="kw">text</span>(ix[i] - <span class="fl">0.3</span>, iy[i], pc, <span class="dt">col =</span> <span class="st">&quot;brown&quot;</span>, <span class="dt">cex =</span> <span class="fl">1.2</span>)
+}</code></pre>
+<ul>
+<li><code>cex</code>, <code>cex.axis</code>, <code>cex.lab</code>, <code>cex.main</code>, <code>cex.sub</code></li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">cex =</span> <span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">pch =</span> <span class="dv">19</span>, <span class="dt">col =</span> <span class="dv">2</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">6</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, 
+    <span class="dv">6</span>))
+<span class="kw">text</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dv">1</span>:<span class="dv">5</span>, <span class="kw">paste</span>(<span class="st">&quot;cex=&quot;</span>, <span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>), <span class="dt">cex =</span> <span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">adj =</span> <span class="dv">1</span>)
+<span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">5</span>, <span class="dt">cex.axis =</span> <span class="dv">2</span>, <span class="dt">cex.lab =</span> <span class="dv">2</span>, <span class="dt">cex.main =</span> <span class="fl">0.3</span>, <span class="dt">main =</span> <span class="st">&quot;This is title&quot;</span>)</code></pre>
+<ul>
+<li><code>col</code>, <code>col.axis</code>, etc</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">pch =</span> <span class="dv">19</span>, <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;yellow&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="dt">cex =</span> <span class="fl">1.5</span>)
+<span class="kw">colors</span>()
+<span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">pch =</span> <span class="dv">19</span>, <span class="dt">col =</span> <span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">cex =</span> <span class="fl">1.5</span>)
+<span class="co"># palette</span>
+<span class="kw">palette</span>(<span class="kw">rainbow</span>(<span class="dv">6</span>))
+<span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">pch =</span> <span class="dv">19</span>, <span class="dt">col =</span> <span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">cex =</span> <span class="fl">1.5</span>)
+<span class="kw">palette</span>(<span class="st">&quot;default&quot;</span>)
+<span class="co"># contiguous colors rainbow; heat.colors; terrain.colors; topo.colors;</span>
+<span class="co"># cm.colors</span>
+<span class="kw">example</span>(rainbow)
+<span class="co"># gray level</span>
+<span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">col =</span> <span class="kw">gray</span>(<span class="dv">1</span>:<span class="dv">10</span>/<span class="dv">10</span>), <span class="dt">pch =</span> <span class="dv">19</span>, <span class="dt">cex =</span> <span class="fl">1.5</span>)
+<span class="co"># RGB color</span>
+<span class="kw">plot</span>(<span class="kw">rnorm</span>(<span class="dv">10000</span>), <span class="kw">rnorm</span>(<span class="dv">10000</span>), <span class="dt">pch =</span> <span class="dv">19</span>, <span class="dt">cex =</span> <span class="fl">1.2</span>, <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">0</span>, 
+    <span class="fl">0.7</span>, <span class="dv">1</span>))
+<span class="kw">plot</span>(<span class="kw">rnorm</span>(<span class="dv">10000</span>), <span class="kw">rnorm</span>(<span class="dv">10000</span>), <span class="dt">pch =</span> <span class="dv">19</span>, <span class="dt">cex =</span> <span class="fl">1.2</span>, <span class="dt">col =</span> <span class="kw">rgb</span>(<span class="dv">0</span>, 
+    <span class="fl">0.7</span>, <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.1</span>))
+<span class="co"># Can you detect what secret lies in this data?</span>
+dat &lt;- <span class="kw">read.table</span>(<span class="st">&quot;rclass6.txt&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)
+<span class="kw">plot</span>(dat)
+<span class="co"># hcl and hsv</span>
+<span class="kw">hsv</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>)
+<span class="kw">hcl</span>()</code></pre>
+</body>
+</html>

@@ -1,0 +1,106 @@
+% Customizing Trditional Graphics (II)
+% Weicheng Zhu
+% 2012/07/04
+
+  <font size = 3 color = "blue">Highly recommend you to use Chrome to read this tutorial! <br /> This tutorial is mainly for Windows users.</font>
+-----------------------------------------------------------------------
+```{r setup, include=FALSE}
+# set global chunk options
+opts_chunk$set(fig.path = 'figure/slides-', cache.path = 'cache/slides-', cache = TRUE)
+#options(width = 55)
+#options(keep.comment = FALSE) 
+#upload images automatically
+#opts_knit$set(upload.fun = imgur_upload)
+```
+
+```{r code-ext, include = FALSE, cache = FALSE}
+read_chunk('Rclass6.R')
+```
+
+- `family`, `font`
+
+```{r family-font, eval=FALSE}
+
+```
+
+- `fg`
+
+```{r fg, eval = FALSE}
+
+```
+
+- `fig`, `fin`, `omd`, `omi`
+
+```{r fig-fin-omd-omi, eval = FALSE}
+
+```
+
+
+- `pin`, `plt`, `usr`
+
+```{r pin-plt-usr, eval = FALSE}
+
+```
+
+- `lab`
+
+```{r lab, eval = FALSE}
+
+```
+
+- `las`
+
+```{r las, eval = FALSE}
+
+```
+
+- `lwd`, `lend`, `ljoin`, `lty`
+
+```{r line-related, eval = FALSE}
+
+```
+
+- `mai`, `mar`, `oma`
+
+```{r mai-mar-oma, eval = FALSE}
+
+```
+
+- `mfcol`, `mfrow`, `layout`, `screen`
+
+```{r layout, eval = FALSE}
+
+```
+
+- `mgp`
+
+```{r mgp, eval = FALSE}
+
+```
+
+- `new`
+
+```{r new, eval = FALSE}
+
+```
+
+- `tcl`
+
+```{r tcl, eval = FALSE}
+
+```
+
+- `xaxp`, `xaxt`, `xaxs`
+
+```{r xaxp-xaxt-xaxs, eval = FALSE}
+
+```
+
+- `xpd`
+
+```{r xpd, eval=FALSE}
+
+```
+
+
+

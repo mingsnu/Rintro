@@ -1,0 +1,27 @@
+% Environment
+% Weicheng Zhu
+% 2012/05/28
+
+  <font size = 3 color = "blue">Highly recommend you to use Chrome to read this tutorial! <br /> This tutorial is mainly for Windows users.</font>
+-----------------------------------------------------------------------
+```{r setup, include=FALSE}
+# set global chunk options
+opts_chunk$set(fig.path = 'figure/slides-', cache.path = 'cache/slides-', cache = TRUE)
+#options(width = 55)
+#options(keep.comment = FALSE) 
+#upload images automatically
+opts_knit$set(upload.fun = imgur_upload)
+```
+
+```{r code-ext, include = FALSE, cache = FALSE}
+read_chunk('environment.R')
+```
+
+# Environment
+
+## What is environment
+
+An environment is an R object that contains the set of symbols available in a given context, the objects associated with those symbols, and a pointer to a parent environment.
+
+An understanding of how environments work in R is essential for writing effective R functions.
+

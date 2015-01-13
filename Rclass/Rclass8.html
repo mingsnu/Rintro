@@ -1,0 +1,597 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title><font size = 3 color = "blue">Highly recommend you to use Chrome to read this tutorial! <br /> This tutorial is mainly for Windows users.</font></h2>
+
+<h1>Necessary tools</h1>
+
+<p>For windows user, you should install <a href="http://cran.r-project.org/bin/windows/base">R</a>, <a href="http://cran.r-project.org/bin/windows/Rtools">Rtools</a> and <a href="http://miktex.org">LaTex</a>, then adjust your PATH directory(<font color = "blue">My Computer-&gt;Properties-&gt;Advanced-&gt;Environmental Variables-&gt;System variables-&gt;Path</font>) and test whether they works well by using following command: <code>R --help; gcc --help; Tex --help</code> in the Command Prompt window(<font color = "blue">start-&gt;All Programs-&gt;Accessories-&gt;Command Prompt</font>).</p>
+
+<h1>Package structure</h1>
+
+<p>The best manual for creating R package is <a href="http://ftp.ctex.org/mirrors/CRAN/doc/manuals/R-exts.html">Writing R Extensions</a>. Here we just introduce some basis.</p>
+
+<p>A simplest package has the following structure:</p>
+
+<pre><code class="no-highlight">pkgName (Name of the package)
+|
+|--DESCRIPTION (A file contains basic information about the package)
+|--R (A subdirectory contains R code files)
+   |--function1.R
+   |--function2.R
+   |--...
+|--man (A subdirectory contains documentation files)
+   |--function1.Rd
+   |--function2.Rd
+   |--...
+|--...
+</code></pre>
+
+<p>Besides the <code>R</code> and <code>man</code> subdirectory, there are also many other available subdirectories, such as <code>data</code>, <code>demo</code>, <code>inst</code>, <code>src</code>, <code>exec</code> and <code>tests</code>. Only the <code>DESCRIPTION</code> file and the <code>R</code> subdirectory is necessary when installing the package, other subdirectories are all optional. So to make the simplest package, you just need to make a folder named with your package name, in which write a <code>DESCRIPTION</code> file and throw some R scripts (*.R) into the <code>R</code> subdictory. Then you can use R CMD INSTALL pkgName&#39; to install it! But it would be inconvenient for others to use your package without documentation files.</p>
+
+<h2>The <code>DESCRIPTION</code> file</h2>
+
+<p>The DESCRIPTION file contains basic information about the package in the following format:</p>
+
+<pre><code class="no-highlight"> Package: pkgname
+ Version: 0.5-1
+ Date: 2004-01-01
+ Title: My First Collection of Functions
+ Authors@R: c(person(&quot;Joe&quot;, &quot;Developer&quot;, role = c(&quot;aut&quot;, &quot;cre&quot;),
+                      email = &quot;Joe.Developer@some.domain.net&quot;),
+               person(&quot;Pat&quot;, &quot;Developer&quot;, role = &quot;aut&quot;),
+               person(&quot;A.&quot;, &quot;User&quot;, role = &quot;ctb&quot;,
+                email = &quot;A.User@whereever.net&quot;))
+ Author: Joe Developer and Pat Developer, with contributions from A. User
+ Maintainer: Joe Developer &lt;Joe.Developer@some.domain.net&gt;
+ Depends: R (&gt;= 1.8.0), nlme
+ Suggests: MASS
+ Description: A short (one paragraph) description of what
+   the package does and why it may be useful.
+ License: GPL (&gt;= 2)
+ URL: http://www.r-project.org, http://www.another.url
+ BugReports: http://pkgname.bugtracker.url
+</code></pre>
+
+<p>The <code>Package</code>, <code>Version</code>, <code>License</code>, <code>Description</code>, <code>Title</code>, <code>Author</code>, and <code>Maintainer</code> fields are mandatory, all other fields are optional. </p>
+
+<h2>Writing R documentation files</h2>
+
+<p>As we had mentioned before, the documentation files are included in the <code>man</code> subdirectory written in &ldquo;R documentation&rdquo;(Rd) format, a simple markup language much of which closely resembles <code>(La)TeX</code>, which can be processed into a variety of formats, including <code>LaTeX</code>, <code>HTM</code>L and <code>plain text</code>.</p>
+
+<p>As an example, let us look at a simplified version of src/library/base/man/load.Rd which documents the R function load.</p>
+
+<pre><code class="no-highlight"> % File src/library/base/man/load.Rd
+ \name{load}
+ \alias{load}
+ \title{Reload Saved Datasets}
+ \description{
+   Reload the datasets written to a file with the function
+   \code{save}.
+ }
+ \usage{
+ load(file, envir = parent.frame())
+ }
+ \arguments{
+   \item{file}{a connection or a character string giving the
+     name of the file to load.}
+   \item{envir}{the environment where the data should be
+     loaded.}
+ }
+ \seealso{
+   \code{\link{save}}.
+ }
+ \examples{
+ ## save all data
+ save(list = ls(), file= &quot;all.RData&quot;)
+
+ ## restore the saved values to the current environment
+ load(&quot;all.RData&quot;)
+
+ ## restore the saved values to the workspace
+ load(&quot;all.RData&quot;, .GlobalEnv)
+ }
+ \keyword{file}
+</code></pre>
+
+<p>For more details please read the 2.1 section of <a href="http://ftp.ctex.org/mirrors/CRAN/doc/manuals/R-exts.html">Writing R Extensions</a>.</p>
+
+<p>So one function (which you want to export) corresponds to one <code>Rd</code> documentation file. Maybe you have note that in fact it is inconvenient to update the functions of your package, because every time you modify your functions, you have to remember to modify your documentation file in the <code>man</code> subdirectory as well. What if you forget to synchronize the documentation files??</p>
+
+<p>One smarter way is to use <code>ROXYGEN2</code>.</p>
+
+<h2><code>ROXYGEN2</code></h2>
+
+<ul>
+<li><p><code>roxygen2</code> is an R packge: In-source documentation for R.</p>
+
+<ul>
+<li>A Doxygen-like in-source documentation system for <code>Rd</code>, <code>collation</code>, and <code>NAMESPACE</code>.</li>
+</ul></li>
+<li><p>What is Doxygen?</p>
+
+<ul>
+<li>Doxygen is a documentation generator, a tool for writing software reference documentation. The documentation is written within code, and is thus relatively easy to keep up to date. Doxygen can cross reference documentation and code, so that the reader of a document can easily refer to the actual code.(From wiki)</li>
+</ul></li>
+</ul>
+
+<p>Here&#39;s a simple example from the stringr package:(From <a href="https://github.com/yihui/roxygen2">https://github.com/yihui/roxygen2</a></p>
+
+<pre><code class="r">#&#39; The length of a string (in characters).
+#&#39; 
+#&#39; @param string input character vector @return numeric vector giving
+#&#39; number of characters in each element of the character vector.  Missing
+#&#39; string have missing length.  @keywords character @seealso
+#&#39; \code{\link{nchar}} which this function wraps @export @examples
+#&#39; str_length(letters) str_length(c(&#39;i&#39;, &#39;like&#39;, &#39;programming&#39;, NA))
+str_length &lt;- function(string) {
+    string &lt;- check_string(string)
+
+    nc &lt;- nchar(string, allowNA = TRUE)
+    is.na(nc) &lt;- is.na(string)
+    nc
+}
+</code></pre>
+
+<p>When you run</p>
+
+<pre><code class="r">library(roxygen2)
+roxygenize(&quot;&lt;package&gt;&quot;)
+</code></pre>
+
+<p>these comments will be automatically transformed to the <code>Rd</code> file you need to pass <code>R CMD check</code>:</p>
+
+<pre><code class="r">\name{str_length}
+\alias{str_length}
+\title{The length of a string (in characters).}
+\usage{str_length(string)}
+\arguments{
+  \item{string}{input character vector}
+}
+\description{
+  The length of a string (in characters).
+}
+\seealso{\code{\link{nchar}} which this function wraps}
+\value{numeric vector giving number of characters in each element of the
+character vector.  Missing string have missing length.}
+\keyword{character}
+\examples{
+  str_length(letters)
+  str_length(c(&quot;i&quot;, &quot;like&quot;, &quot;programming&quot;, NA))
+}
+</code></pre>
+
+<h2>EMACS with ROXYGEN2</title>
+
+<base target="_blank"/>
+
+<style type="text/css">
+
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: Consolas, 'Lucida Console', 'DejaVu Sans Mono', 'Droid Sans Mono', Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+}
+
+.r {
+   background-color: #F8F8F8;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+	border-top-style: dotted;
+	border-top-color: #999999;
+}
+
+/*
+ * highlight.styles.css
+ *
+ * RStudio style for highlight.js in HTML preview. Initial template based
+ * on highlight.js VS style by JasonDiamond, tweaked to look more like
+ * the default RStudio TextMate theme.
+ *
+ * Copyright (C) 2009-12 by RStudio, Inc.
+ * Copyright (C) Jason Diamond <jason@diamond.name>
+ *
+ * This program is licensed to you under the terms of version 3 of the
+ * GNU Affero General Public License. This program is distributed WITHOUT
+ * ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING THOSE OF NON-INFRINGEMENT,
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Please refer to the
+ * AGPL (http://www.gnu.org/licenses/agpl-3.0.txt) for more details.
+ *
+ */
+
+pre code {
+  display: block; padding: 0.5em;
+}
+
+pre .operator,
+pre .paren {
+  color: rgb(104, 118, 135)
+}
+
+pre .literal {
+  color: rgb(88, 72, 246)
+}
+
+pre .number {
+  color: rgb(0, 0, 205);
+}
+
+pre .comment,
+pre .annotation,
+pre .template_comment,
+pre .diff .header,
+pre .chunk,
+pre .apache .cbracket {
+  color: rgb(76, 136, 107);
+}
+
+pre .keyword,
+pre .id,
+pre .title,
+pre .built_in,
+pre .aggregate,
+pre .smalltalk .class,
+pre .winutils,
+pre .bash .variable,
+pre .tex .command {
+  color: rgb(0, 0, 255);
+}
+
+pre .string,
+pre .title,
+pre .parent,
+pre .tag .value,
+pre .rules .value,
+pre .rules .value .number,
+pre .ruby .symbol,
+pre .ruby .symbol .string,
+pre .ruby .symbol .keyword,
+pre .ruby .symbol .keymethods,
+pre .instancevar,
+pre .aggregate,
+pre .template_tag,
+pre .django .variable,
+pre .addition,
+pre .flow,
+pre .stream,
+pre .apache .tag,
+pre .date,
+pre .tex .formula {
+  color: rgb(3, 106, 7);
+}
+
+pre .ruby .string,
+pre .decorator,
+pre .filter .argument,
+pre .localvars,
+pre .array,
+pre .attr_selector,
+pre .pseudo,
+pre .pi,
+pre .doctype,
+pre .deletion,
+pre .envvar,
+pre .shebang,
+pre .preprocessor,
+pre .userType,
+pre .apache .sqbracket,
+pre .nginx .built_in,
+pre .tex .special,
+pre .input_number {
+  color: rgb(43, 145, 175);
+}
+
+pre .phpdoc,
+pre .javadoc,
+pre .xmlDocTag {
+  color: rgb(128, 159, 191);
+}
+
+pre .vhdl .type { font-weight: bold; }
+pre .vhdl .string { color: #666666; }
+pre .vhdl .literal { color: rgb(163, 21, 21); }
+
+
+
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<script type="text/javascript">
+   var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]||p=="no-highlight"){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v=="no-highlight"){return}if(v){y=d(v,x)}else{y=g(x);v=y.language}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+   hljs.initHighlightingOnLoad();  
+</script>
+
+
+
+</head>
+
+<body>
+<p>% Creating R packages<br/>
+% Weicheng Zhu<br/>
+% 2012/07/23</p>
+
+<h2><font size = 3 color = "blue">Highly recommend you to use Chrome to read this tutorial! <br /> This tutorial is mainly for Windows users.</font></h2>
+
+<h1>Necessary tools</h1>
+
+<p>For windows user, you should install <a href="http://cran.r-project.org/bin/windows/base">R</a>, <a href="http://cran.r-project.org/bin/windows/Rtools">Rtools</a> and <a href="http://miktex.org">LaTex</a>, then adjust your PATH directory(<font color = "blue">My Computer-&gt;Properties-&gt;Advanced-&gt;Environmental Variables-&gt;System variables-&gt;Path</font>) and test whether they works well by using following command: <code>R --help; gcc --help; Tex --help</code> in the Command Prompt window(<font color = "blue">start-&gt;All Programs-&gt;Accessories-&gt;Command Prompt</font>).</p>
+
+<h1>Package structure</h1>
+
+<p>The best manual for creating R package is <a href="http://ftp.ctex.org/mirrors/CRAN/doc/manuals/R-exts.html">Writing R Extensions</a>. Here we just introduce some basis.</p>
+
+<p>A simplest package has the following structure:</p>
+
+<pre><code class="no-highlight">pkgName (Name of the package)
+|
+|--DESCRIPTION (A file contains basic information about the package)
+|--R (A subdirectory contains R code files)
+   |--function1.R
+   |--function2.R
+   |--...
+|--man (A subdirectory contains documentation files)
+   |--function1.Rd
+   |--function2.Rd
+   |--...
+|--...
+</code></pre>
+
+<p>Besides the <code>R</code> and <code>man</code> subdirectory, there are also many other available subdirectories, such as <code>data</code>, <code>demo</code>, <code>inst</code>, <code>src</code>, <code>exec</code> and <code>tests</code>. Only the <code>DESCRIPTION</code> file and the <code>R</code> subdirectory is necessary when installing the package, other subdirectories are all optional. So to make the simplest package, you just need to make a folder named with your package name, in which write a <code>DESCRIPTION</code> file and throw some R scripts (*.R) into the <code>R</code> subdictory. Then you can use R CMD INSTALL pkgName&#39; to install it! But it would be inconvenient for others to use your package without documentation files.</p>
+
+<h2>The <code>DESCRIPTION</code> file</h2>
+
+<p>The DESCRIPTION file contains basic information about the package in the following format:</p>
+
+<pre><code class="no-highlight"> Package: pkgname
+ Version: 0.5-1
+ Date: 2004-01-01
+ Title: My First Collection of Functions
+ Authors@R: c(person(&quot;Joe&quot;, &quot;Developer&quot;, role = c(&quot;aut&quot;, &quot;cre&quot;),
+                      email = &quot;Joe.Developer@some.domain.net&quot;),
+               person(&quot;Pat&quot;, &quot;Developer&quot;, role = &quot;aut&quot;),
+               person(&quot;A.&quot;, &quot;User&quot;, role = &quot;ctb&quot;,
+                email = &quot;A.User@whereever.net&quot;))
+ Author: Joe Developer and Pat Developer, with contributions from A. User
+ Maintainer: Joe Developer &lt;Joe.Developer@some.domain.net&gt;
+ Depends: R (&gt;= 1.8.0), nlme
+ Suggests: MASS
+ Description: A short (one paragraph) description of what
+   the package does and why it may be useful.
+ License: GPL (&gt;= 2)
+ URL: http://www.r-project.org, http://www.another.url
+ BugReports: http://pkgname.bugtracker.url
+</code></pre>
+
+<p>The <code>Package</code>, <code>Version</code>, <code>License</code>, <code>Description</code>, <code>Title</code>, <code>Author</code>, and <code>Maintainer</code> fields are mandatory, all other fields are optional. </p>
+
+<h2>Writing R documentation files</h2>
+
+<p>As we had mentioned before, the documentation files are included in the <code>man</code> subdirectory written in &ldquo;R documentation&rdquo;(Rd) format, a simple markup language much of which closely resembles <code>(La)TeX</code>, which can be processed into a variety of formats, including <code>LaTeX</code>, <code>HTM</code>L and <code>plain text</code>.</p>
+
+<p>As an example, let us look at a simplified version of src/library/base/man/load.Rd which documents the R function load.</p>
+
+<pre><code class="no-highlight"> % File src/library/base/man/load.Rd
+ \name{load}
+ \alias{load}
+ \title{Reload Saved Datasets}
+ \description{
+   Reload the datasets written to a file with the function
+   \code{save}.
+ }
+ \usage{
+ load(file, envir = parent.frame())
+ }
+ \arguments{
+   \item{file}{a connection or a character string giving the
+     name of the file to load.}
+   \item{envir}{the environment where the data should be
+     loaded.}
+ }
+ \seealso{
+   \code{\link{save}}.
+ }
+ \examples{
+ ## save all data
+ save(list = ls(), file= &quot;all.RData&quot;)
+
+ ## restore the saved values to the current environment
+ load(&quot;all.RData&quot;)
+
+ ## restore the saved values to the workspace
+ load(&quot;all.RData&quot;, .GlobalEnv)
+ }
+ \keyword{file}
+</code></pre>
+
+<p>For more details please read the 2.1 section of <a href="http://ftp.ctex.org/mirrors/CRAN/doc/manuals/R-exts.html">Writing R Extensions</a>.</p>
+
+<p>So one function (which you want to export) corresponds to one <code>Rd</code> documentation file. Maybe you have note that in fact it is inconvenient to update the functions of your package, because every time you modify your functions, you have to remember to modify your documentation file in the <code>man</code> subdirectory as well. What if you forget to synchronize the documentation files??</p>
+
+<p>One smarter way is to use <code>ROXYGEN2</code>.</p>
+
+<h2><code>ROXYGEN2</code></h2>
+
+<ul>
+<li><p><code>roxygen2</code> is an R packge: In-source documentation for R.</p>
+
+<ul>
+<li>A Doxygen-like in-source documentation system for <code>Rd</code>, <code>collation</code>, and <code>NAMESPACE</code>.</li>
+</ul></li>
+<li><p>What is Doxygen?</p>
+
+<ul>
+<li>Doxygen is a documentation generator, a tool for writing software reference documentation. The documentation is written within code, and is thus relatively easy to keep up to date. Doxygen can cross reference documentation and code, so that the reader of a document can easily refer to the actual code.(From wiki)</li>
+</ul></li>
+</ul>
+
+<p>Here&#39;s a simple example from the stringr package:(From <a href="https://github.com/yihui/roxygen2">https://github.com/yihui/roxygen2</a></p>
+
+<pre><code class="r">#&#39; The length of a string (in characters).
+#&#39; 
+#&#39; @param string input character vector @return numeric vector giving
+#&#39; number of characters in each element of the character vector.  Missing
+#&#39; string have missing length.  @keywords character @seealso
+#&#39; \code{\link{nchar}} which this function wraps @export @examples
+#&#39; str_length(letters) str_length(c(&#39;i&#39;, &#39;like&#39;, &#39;programming&#39;, NA))
+str_length &lt;- function(string) {
+    string &lt;- check_string(string)
+
+    nc &lt;- nchar(string, allowNA = TRUE)
+    is.na(nc) &lt;- is.na(string)
+    nc
+}
+</code></pre>
+
+<p>When you run</p>
+
+<pre><code class="r">library(roxygen2)
+roxygenize(&quot;&lt;package&gt;&quot;)
+</code></pre>
+
+<p>these comments will be automatically transformed to the <code>Rd</code> file you need to pass <code>R CMD check</code>:</p>
+
+<pre><code class="r">\name{str_length}
+\alias{str_length}
+\title{The length of a string (in characters).}
+\usage{str_length(string)}
+\arguments{
+  \item{string}{input character vector}
+}
+\description{
+  The length of a string (in characters).
+}
+\seealso{\code{\link{nchar}} which this function wraps}
+\value{numeric vector giving number of characters in each element of the
+character vector.  Missing string have missing length.}
+\keyword{character}
+\examples{
+  str_length(letters)
+  str_length(c(&quot;i&quot;, &quot;like&quot;, &quot;programming&quot;, NA))
+}
+</code></pre>
+
+<h2>EMACS with ROXYGEN2</h2>
+
+<p>Maybe you also hate to type <code>#&#39; @xxx</code>, then I recommend you to use EMACS. There are many tutorials on the website about EMACS. </p>
+
+<p>Open the R script with EMACS and put your cursor on the function which you want to be documented, and just press <code>Ctrl-c Ctrl-o</code>, EMACS will help you to type all the <code>#&#39; @xxx</code>!</p>
+
+<h1>Submitting to CRAN</h1>
+
+<p>Before submitting your package to CRAN, you should make sure it can meet all the <a href="http://cran.r-project.org/web/packages/policies.html">CRAN Repository Policy</a>, among which one most important rule is your package can pass the <code>R CMD chek</code>: </p>
+
+<pre><code class="r">R CMD check pkgname
+</code></pre>
+
+<p>And last upload your package to <a href="ftp://CRAN.R-project.org/incoming">ftp://CRAN.R-project.org/incoming</a> and send email to <a href="mailto:CRAN@R-project.org">CRAN@R-project.org</a>. </p>
+
+</body>
+
+</html>
+
